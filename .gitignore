@@ -4,7 +4,10 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+<<<<<<< HEAD
 
+=======
+>>>>>>> f683e1170c0f85cdb40457090bbf6a9194fc091a
 .env
 # Runtime data
 pids
