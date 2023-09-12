@@ -1,6 +1,7 @@
 const express = require('express');
 const { Telegraf } = require('telegraf');
-const { OpenAI } = require('openai');
+const axios = require('axios');
+
 
 require('dotenv').config();
 
