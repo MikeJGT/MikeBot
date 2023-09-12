@@ -2,6 +2,7 @@ const express = require('express');
 const { Telegraf } = require('telegraf');
 const axios = require('axios');
 const { OpenAI } = require('openai');
+const ngrok = require('ngrok');
 
 require('dotenv').config();
 
@@ -9,9 +10,22 @@ require('dotenv').config();
 //Creacion de la app con express
 const app = express();
 const bot = new Telegraf(process.env.BOT_TOKEN);
-
 app.use(bot.webhookCallback('/telegram-bot'));
-bot.telegram.setWebhook(`${process.env.BOT_URL}/telegram-bot`);
+
+
+let url = '';
+(async function () {
+    try {
+        url = await ngrok.connect(3000);
+        console.log('ngRok URL:', url)
+        await bot.telegram.setWebhook(`${url}/telegram-bot`);
+    } catch (err) {
+        console.log('ERROR > ', err)
+    }
+
+})();
+
+
 
 app.post('/telegram-bot', (req, res) => {
     res.send('Hola Bot');
@@ -79,33 +93,36 @@ bot.on('message', async (ctx) => {
     const openai = new OpenAI({
         apiKey: process.env.OPENAI_KEY
     });
-
-    const completion = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        max_tokens: 300,
-        messages: [
-            {
-                role: 'assistant',
-                content: `Eres un desarrollador Full Stack.`
-            },
-            { role: 'user', content: `Hablame de ti` },
-            { role: 'assistant', content: `Soy un desarrollador full stack con background tecnológico. Estoy aquí para resolver tus dudas acerca de mi perfil.` },
-            { role: 'user', content: `Qué experiencia tienes?` },
-            { role: 'assistant', content: `He participado conjuntamente en el proyecto Class Mate, además de otros proyectos individuales como leafletMap, puedes consultarlos en mi github o con el comando /proyects` },
-            { role: 'user', content: 'Que tecnologías usas?' },
-            { role: 'assistant', content: 'Las únicas tecnologías que uso son: Angular,JavaScript,TypeScript,NodeJS,Jasmine/Karma,Express.js,API REST,MongoDB,SQL,HTML,CSS/SASS,GIT.' },
-            { role: 'user', content: 'tienes experiencia en Java o PHP?' },
-            { role: 'assistant', content: 'Por ahora no tengo experiencia en otras tecnologías.' },
-            { role: 'user', content: 'Que estudios tienes?' },
-            { role: 'assistant', content: 'Tengo un background tecnológico con estudios en ing.Informática.' },
-            { role: 'assistant', content: 'Para mas info puedes contactar conmigo.' },
-            { role: 'assistant', content: 'Aquí tienes la lista de comandos: /comandos' },
-            { role: 'assistant', content: `Responde con la información anterior,no inventes, en menos de 18 palabras a la pregunta exacta: ${ctx.message.text}` }
-        ]
-    });
-    console.log('Response', completion);
-    console.log('Mensaje', completion.choices[0].message.content);
-    ctx.reply(completion.choices[0].message.content);
+    try {
+        const completion = await openai.chat.completions.create({
+            model: 'gpt-3.5-turbo',
+            max_tokens: 300,
+            messages: [
+                {
+                    role: 'assistant',
+                    content: `Eres un desarrollador Full Stack.`
+                },
+                { role: 'user', content: `Hablame de ti` },
+                { role: 'assistant', content: `Soy un desarrollador full stack con background tecnológico. Estoy aquí para resolver tus dudas acerca de mi perfil.` },
+                { role: 'user', content: `Qué experiencia tienes?` },
+                { role: 'assistant', content: `He participado conjuntamente en el proyecto Class Mate, además de otros proyectos individuales como leafletMap, puedes consultarlos en mi github o con el comando /proyects` },
+                { role: 'user', content: 'Que tecnologías usas?' },
+                { role: 'assistant', content: 'Las únicas tecnologías que uso son: Angular,JavaScript,TypeScript,NodeJS,Jasmine/Karma,Express.js,API REST,MongoDB,SQL,HTML,CSS/SASS,GIT.' },
+                { role: 'user', content: 'tienes experiencia en Java o PHP?' },
+                { role: 'assistant', content: 'Por ahora no tengo experiencia en otras tecnologías.' },
+                { role: 'user', content: 'Que estudios tienes?' },
+                { role: 'assistant', content: 'Tengo un background tecnológico con estudios en ing.Informática.' },
+                { role: 'assistant', content: 'Para mas info puedes contactar conmigo.' },
+                { role: 'assistant', content: 'Aquí tienes la lista de comandos: /comandos' },
+                { role: 'assistant', content: `Responde con la información anterior,no inventes, en menos de 18 palabras a la pregunta exacta: ${ctx.message.text}` }
+            ]
+        });
+        //console.log('Response', completion);
+        //console.log('Mensaje', completion.choices[0].message.content);
+        ctx.reply(completion.choices[0].message.content);
+    } catch (err) {
+        console.log('ERROR > ', err)
+    }
 });
 
 const PORT = process.env.PORT || 3000;
