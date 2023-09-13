@@ -19,12 +19,13 @@ try {
 
 let url = '';
 try {
-    (async function () {
-        url = await ngrok.connect(3000);
-        console.log('ngRok URL:', url)
-        await bot.telegram.setWebhook(`${url}/telegram-bot`);
+    setTimeout(
+        (async function () {
+            url = await ngrok.connect(3000);
+            console.log('ngRok URL:', url)
+            await bot.telegram.setWebhook(`${url}/telegram-bot`);
 
-    })();
+        })(), 7200000)
 } catch (err) {
     console.log('ERROR > ', err)
 }
