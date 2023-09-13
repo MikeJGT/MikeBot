@@ -2,7 +2,7 @@ const express = require('express');
 const { Telegraf } = require('telegraf');
 const axios = require('axios');
 const { OpenAI } = require('openai');
-const ngrok = require('ngrok');
+const ngrok = require("@ngrok/ngrok");
 
 require('dotenv').config();
 
@@ -19,24 +19,24 @@ try {
 
 let url = '';
 (async function () {
-    url = await ngrok.connect(3000);
+    url = await ngrok.connect({ addr: 3000, authtoken: '2OE9uYXFw053NN59bfxCBCw0KHs_2YsdbywEF8Cndj5ZfJ8MY' });
     console.log('ngRok URL:', url)
     await bot.telegram.setWebhook(`${url}/telegram-bot`);
+})();
 
-})()
-try {
-    setInterval(() => {
-        (async function () {
-            url = await ngrok.connect(3000);
-            console.log('ngRok URL:', url)
-            await bot.telegram.setWebhook(`${url}/telegram-bot`);
+// try {
+//     setInterval(() => {
+//         (async function () {
+//             url = await ngrok.connect(3000);
+//             console.log('ngRok URL:', url);
+//             await bot.telegram.deleteWebhook();
+//             await bot.telegram.setWebhook(`${url}/telegram-bot`);
 
-        })()
-    }
-        , 7200000)
-} catch (err) {
-    console.log('ERROR > ', err)
-}
+//         })();
+//     }, 7200000);
+// } catch (err) {
+//     console.log('ERROR > ', err)
+// }
 
 
 try {
