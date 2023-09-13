@@ -38,7 +38,7 @@ let comandos = `
 
 /info Información acerca del chat.
 /github Link de github.
-/proyects Muestra de algunos proyectos. 
+/proyecto Muestra de algunos proyectos. 
 ` ;
 
 bot.command('start', (ctx) => {
@@ -52,7 +52,7 @@ bot.command('github', (ctx) => {
     https://github.com/MikeJGT`);
 });
 
-bot.command('proyects', async (ctx) => {
+bot.command('proyecto', async (ctx) => {
     // ctx.replyWithDice();
     // vanilla js 
     ctx.reply(`
@@ -83,17 +83,17 @@ bot.command('comandos', (ctx) => {
 });
 
 
-bot.on('message', async (ctx) => {
-    //console.log(ctx.message.text);
-    //chatGPT(ctx.message.text);
-    // const configuration = new Configuration({
-    //     apiKey: process.env.OPENAI_KEY
-    // });
-    // headers.Authorization, 'Content-Length'
-    const openai = new OpenAI({
-        apiKey: process.env.OPENAI_KEY
-    });
-    try {
+try {
+    bot.on('message', async (ctx) => {
+        //console.log(ctx.message.text);
+        //chatGPT(ctx.message.text);
+        // const configuration = new Configuration({
+        //     apiKey: process.env.OPENAI_KEY
+        // });
+        // headers.Authorization, 'Content-Length'
+        const openai = new OpenAI({
+            apiKey: process.env.OPENAI_KEY
+        });
         const completion = await openai.chat.completions.create({
             model: 'gpt-3.5-turbo',
             max_tokens: 300,
@@ -105,7 +105,7 @@ bot.on('message', async (ctx) => {
                 { role: 'user', content: `Hablame de ti` },
                 { role: 'assistant', content: `Soy un desarrollador full stack con background tecnológico. Estoy aquí para resolver tus dudas acerca de mi perfil.` },
                 { role: 'user', content: `Qué experiencia tienes?` },
-                { role: 'assistant', content: `He participado conjuntamente en el proyecto Class Mate, además de otros proyectos individuales como leafletMap, puedes consultarlos en mi github o con el comando /proyects` },
+                { role: 'assistant', content: `He participado conjuntamente en el proyecto Class Mate, además de otros proyectos individuales como leafletMap, puedes consultarlos en mi github o con el comando /proyecto` },
                 { role: 'user', content: 'Que tecnologías usas?' },
                 { role: 'assistant', content: 'Las únicas tecnologías que uso son: Angular,JavaScript,TypeScript,NodeJS,Jasmine/Karma,Express.js,API REST,MongoDB,SQL,HTML,CSS/SASS,GIT.' },
                 { role: 'user', content: 'tienes experiencia en Java o PHP?' },
@@ -120,10 +120,10 @@ bot.on('message', async (ctx) => {
         //console.log('Response', completion);
         //console.log('Mensaje', completion.choices[0].message.content);
         ctx.reply(completion.choices[0].message.content);
-    } catch (err) {
-        console.log('ERROR > ', err)
-    }
-});
+    });
+} catch (err) {
+    console.log('ERROR > ', err)
+}
 
 const PORT = process.env.PORT || 3000;
 
