@@ -10,26 +10,34 @@ require('dotenv').config();
 //Creacion de la app con express
 const app = express();
 const bot = new Telegraf(process.env.BOT_TOKEN);
-app.use(bot.webhookCallback('/telegram-bot'));
+try {
+    app.use(bot.webhookCallback('/telegram-bot'));
+} catch (err) {
+    console.log('ERROR', err);
+}
 
 
 let url = '';
-(async function () {
-    try {
+try {
+    (async function () {
         url = await ngrok.connect(3000);
         console.log('ngRok URL:', url)
         await bot.telegram.setWebhook(`${url}/telegram-bot`);
-    } catch (err) {
-        console.log('ERROR > ', err)
-    }
 
-})();
+    })();
+} catch (err) {
+    console.log('ERROR > ', err)
+}
 
 
+try {
+    app.post('/telegram-bot', (req, res) => {
+        res.send('Hola Bot');
+    });
 
-app.post('/telegram-bot', (req, res) => {
-    res.send('Hola Bot');
-});
+} catch (err) {
+    console.log('ERROR > ', err)
+}
 
 
 
@@ -83,14 +91,14 @@ bot.command('comandos', (ctx) => {
 });
 
 
-try {
-    bot.on('message', async (ctx) => {
-        //console.log(ctx.message.text);
-        //chatGPT(ctx.message.text);
-        // const configuration = new Configuration({
-        //     apiKey: process.env.OPENAI_KEY
-        // });
-        // headers.Authorization, 'Content-Length'
+bot.on('message', async (ctx) => {
+    //console.log(ctx.message.text);
+    //chatGPT(ctx.message.text);
+    // const configuration = new Configuration({
+    //     apiKey: process.env.OPENAI_KEY
+    // });
+    // headers.Authorization, 'Content-Length'
+    try {
         const openai = new OpenAI({
             apiKey: process.env.OPENAI_KEY
         });
@@ -120,13 +128,18 @@ try {
         //console.log('Response', completion);
         //console.log('Mensaje', completion.choices[0].message.content);
         ctx.reply(completion.choices[0].message.content);
-    });
-} catch (err) {
-    console.log('ERROR > ', err)
-}
+    } catch (err) {
+        console.log('ERROR > ', err)
+    }
+});
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-    console.log(`Servidor escuchando en el puerto ${PORT}`);
-});
+try {
+    app.listen(PORT, () => {
+        console.log(`Servidor escuchando en el puerto ${PORT}`);
+    });
+
+} catch (err) {
+    console.log('ERROR:', err);
+}
