@@ -12,26 +12,26 @@ const app = express();
 const bot = new Telegraf(process.env.BOT_TOKEN);
 try {
     app.use(bot.webhookCallback('/telegram-bot'));
+    bot.telegram.setWebhook(`${process.env.BOT_URL}/telegram-bot`);
 } catch (err) {
     console.log('ERROR', err);
 }
 
 
-let url = '';
-(async function () {
-    await ngrok.upgradeConfig({ relocate: true });
-    url = await ngrok.connect({ addr: 3000, authtoken: '2OE9uYXFw053NN59bfxCBCw0KHs_2YsdbywEF8Cndj5ZfJ8MY' });
-    const api = ngrok.getApi();
-    const tunnels = await api.listTunnels();
-    const tunnel = await api.tunnelDetail(tunnels.tunnels[0].name);
+// let url = '';
+// (async function () {
+//     await ngrok.upgradeConfig({ relocate: true });
+//     url = await ngrok.connect({ addr: 3000, authtoken: '2OE9uYXFw053NN59bfxCBCw0KHs_2YsdbywEF8Cndj5ZfJ8MY' });
+//     const api = ngrok.getApi();
+//     const tunnels = await api.listTunnels();
+//     const tunnel = await api.tunnelDetail(tunnels.tunnels[0].name);
 
-    console.log('Lista de conexiones', tunnels);
-    console.log('Nombre', tunnels.tunnels[0].name);
-    console.log('Tunnel Details', tunnel);
-    console.log('ngRok URL:', url);
-    //console.log('Tunnel Details', tunnel);
-    await bot.telegram.setWebhook(`${url}/telegram-bot`);
-})();
+//     console.log('Lista de conexiones', tunnels);
+//     console.log('Nombre', tunnels.tunnels[0].name);
+//     console.log('Tunnel Details', tunnel);
+//     console.log('ngRok URL:', url);
+//     //console.log('Tunnel Details', tunnel);
+// })();
 
 // try {
 //     setInterval(() => {
