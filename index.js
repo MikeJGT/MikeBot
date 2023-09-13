@@ -18,8 +18,14 @@ try {
 
 
 let url = '';
+(async function () {
+    url = await ngrok.connect(3000);
+    console.log('ngRok URL:', url)
+    await bot.telegram.setWebhook(`${url}/telegram-bot`);
+
+})()
 try {
-    setTimeout(() => {
+    setInterval(() => {
         (async function () {
             url = await ngrok.connect(3000);
             console.log('ngRok URL:', url)
