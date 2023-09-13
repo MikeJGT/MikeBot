@@ -2,8 +2,8 @@ const express = require('express');
 const { Telegraf } = require('telegraf');
 const axios = require('axios');
 const { OpenAI } = require('openai');
-const ngrok = require("@ngrok/ngrok");
-
+//const ngrok = require("@ngrok/ngrok");
+const ngrok = require('ngrok');
 require('dotenv').config();
 
 
@@ -19,8 +19,17 @@ try {
 
 let url = '';
 (async function () {
+    await ngrok.upgradeConfig({ relocate: true });
     url = await ngrok.connect({ addr: 3000, authtoken: '2OE9uYXFw053NN59bfxCBCw0KHs_2YsdbywEF8Cndj5ZfJ8MY' });
-    console.log('ngRok URL:', url)
+    const api = ngrok.getApi();
+    const tunnels = await api.listTunnels();
+    const tunnel = await api.tunnelDetail(tunnels.tunnels[0].name);
+
+    console.log('Lista de conexiones', tunnels);
+    console.log('Nombre', tunnels.tunnels[0].name);
+    console.log('Tunnel Details', tunnel);
+    console.log('ngRok URL:', url);
+    //console.log('Tunnel Details', tunnel);
     await bot.telegram.setWebhook(`${url}/telegram-bot`);
 })();
 
@@ -147,6 +156,9 @@ const PORT = process.env.PORT || 3000;
 try {
     app.listen(PORT, () => {
         console.log(`Servidor escuchando en el puerto ${PORT}`);
+        //console.log('Lista de conexiones', tunnels);
+
+
     });
 
 } catch (err) {
