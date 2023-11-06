@@ -2,7 +2,6 @@ const express = require('express');
 const { Telegraf } = require('telegraf');
 const axios = require('axios');
 const { OpenAI } = require('openai');
-//const ngrok = require("@ngrok/ngrok");
 const ngrok = require('ngrok');
 require('dotenv').config();
 
@@ -16,36 +15,6 @@ try {
 } catch (err) {
     console.log('ERROR', err);
 }
-
-
-// let url = '';
-// (async function () {
-//     await ngrok.upgradeConfig({ relocate: true });
-//     url = await ngrok.connect({ addr: 3000, authtoken: '2OE9uYXFw053NN59bfxCBCw0KHs_2YsdbywEF8Cndj5ZfJ8MY' });
-//     const api = ngrok.getApi();
-//     const tunnels = await api.listTunnels();
-//     const tunnel = await api.tunnelDetail(tunnels.tunnels[0].name);
-
-//     console.log('Lista de conexiones', tunnels);
-//     console.log('Nombre', tunnels.tunnels[0].name);
-//     console.log('Tunnel Details', tunnel);
-//     console.log('ngRok URL:', url);
-//     //console.log('Tunnel Details', tunnel);
-// })();
-
-// try {
-//     setInterval(() => {
-//         (async function () {
-//             url = await ngrok.connect(3000);
-//             console.log('ngRok URL:', url);
-//             await bot.telegram.deleteWebhook();
-//             await bot.telegram.setWebhook(`${url}/telegram-bot`);
-
-//         })();
-//     }, 7200000);
-// } catch (err) {
-//     console.log('ERROR > ', err)
-// }
 
 
 try {
@@ -79,8 +48,6 @@ bot.command('github', (ctx) => {
 });
 
 bot.command('proyecto', async (ctx) => {
-    // ctx.replyWithDice();
-    // vanilla js 
     ctx.reply(`
 
     Aplicación de tareas: gestiona tus quehaceres
@@ -110,12 +77,6 @@ bot.command('comandos', (ctx) => {
 
 
 bot.on('message', async (ctx) => {
-    //console.log(ctx.message.text);
-    //chatGPT(ctx.message.text);
-    // const configuration = new Configuration({
-    //     apiKey: process.env.OPENAI_KEY
-    // });
-    // headers.Authorization, 'Content-Length'
     try {
         const openai = new OpenAI({
             apiKey: process.env.OPENAI_KEY
@@ -143,8 +104,6 @@ bot.on('message', async (ctx) => {
                 { role: 'assistant', content: `Responde con la información anterior,no inventes, en menos de 18 palabras a la pregunta exacta: ${ctx.message.text}` }
             ]
         });
-        //console.log('Response', completion);
-        //console.log('Mensaje', completion.choices[0].message.content);
         ctx.reply(completion.choices[0].message.content);
     } catch (err) {
         console.log('ERROR > ', err)
@@ -156,9 +115,6 @@ const PORT = process.env.PORT || 3000;
 try {
     app.listen(PORT, () => {
         console.log(`Servidor escuchando en el puerto ${PORT}`);
-        //console.log('Lista de conexiones', tunnels);
-
-
     });
 
 } catch (err) {
