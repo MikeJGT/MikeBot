@@ -18,7 +18,7 @@ PORT="3000"
 
 ```
 
-Puedes obtener tus tokens en los siguientes enlaces [BOT_URL](https://core.telegram.org/bots/api), [OPENAI_KEY](https://platform.openai.com/account/usage),[BOT_URL](https://ngrok.com/)
+Puedes obtener tus tokens en los siguientes enlaces [BOT_URL](https://core.telegram.org/bots/api), [OPENAI_KEY](https://platform.openai.com/account/usage), [BOT_URL](https://ngrok.com/)
 
 Una vez has creado el .env y tienes el proyecto, abre la carpeta en tu terminal y escribe:
 
