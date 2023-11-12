@@ -6,6 +6,7 @@ Este bot te permite resolver todas las dudas que tengas sobre mi perfil de una f
 ### Dependencias
 Para usar este proyecto necesitas tener instalado [NodeJS](https://nodejs.org/en).
 
+### Instalación
 Puedes descargar la carpeta comprimida desde la pestaña code o darle a fork si ya tienes una cuenta de github.
 
 Crea un fichero .env con las variables de entorno necesarias en la raiz del proyecto.
